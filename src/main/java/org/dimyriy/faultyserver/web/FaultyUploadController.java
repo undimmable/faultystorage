@@ -40,7 +40,7 @@ public class FaultyUploadController {
     }
 
     @NotNull
-    @DeleteMapping(value = "files/{filename}", consumes = MediaType.APPLICATION_JSON_VALUE)
+    @DeleteMapping(value = "files/{filename}")
     @Validated
     public ResponseEntity<?> delete(@PathVariable
                                     @NotNull(message = "filename should be provided")
