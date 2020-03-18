@@ -53,7 +53,9 @@ public class FaultyStorage {
         try {
             final byte[] content = file.getBytes();
             failer.tamper(content);
-            fs.put(originalFilename, content);
+            if (!fs.put(originalFilename, content)) {
+                throw new ResponseStatusException(HttpStatus.CONFLICT);
+            }
             return ResponseEntity.ok().build();
         } catch (IOException e) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "uploading failed");
