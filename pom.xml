@@ -55,6 +55,7 @@
         </dependency>
     </dependencies>
     <build>
+        <finalName>faulty-storage</finalName>
         <plugins>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
