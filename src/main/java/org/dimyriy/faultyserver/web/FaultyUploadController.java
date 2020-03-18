@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -27,17 +28,20 @@ public class FaultyUploadController {
     }
 
     @GetMapping(value = "files", produces = MediaType.APPLICATION_JSON_VALUE)
+    @Validated
     public List<String> list() {
         return faultyStorage.list();
     }
 
-    @PostMapping(value = "files")
+    @PostMapping(value = "files", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    @Validated
     public ResponseEntity<?> upload(@RequestParam("file") @NotNull(message = "'file' should be present") final MultipartFile file) {
         return faultyStorage.upload(file);
     }
 
     @NotNull
-    @DeleteMapping("files/{filename}")
+    @DeleteMapping(value = "files/{filename}", consumes = MediaType.APPLICATION_JSON_VALUE)
+    @Validated
     public ResponseEntity<?> delete(@PathVariable
                                     @NotNull(message = "filename should be provided")
                                     @Pattern(regexp = FILENAME_REGEX, message = "filename is invalid") final String filename) {
@@ -45,7 +49,8 @@ public class FaultyUploadController {
     }
 
     @NotNull
-    @GetMapping("files/{filename}")
+    @GetMapping(value = "files/{filename}", produces = MediaType.APPLICATION_OCTET_STREAM_VALUE)
+    @Validated
     public ResponseEntity<Resource> download(@PathVariable
                                              @NotNull(message = "filename should be provided")
                                              @Pattern(regexp = FILENAME_REGEX, message = "filename is invalid") final String filename) {
