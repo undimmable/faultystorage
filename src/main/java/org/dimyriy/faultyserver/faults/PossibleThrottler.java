@@ -12,9 +12,9 @@ import javax.validation.constraints.NotNull;
 
 @Component
 @PropertySource("classpath:failure.properties")
-public class PossibleFailer implements Failer {
+public class PossibleThrottler implements Throttler {
     @NotNull
-    private static final Logger LOGGER = LoggerFactory.getLogger(PossibleFailer.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(PossibleThrottler.class);
     @NotNull
     private final ProbabilityFunction probabilityFunction;
     @NotNull
@@ -25,14 +25,14 @@ public class PossibleFailer implements Failer {
     private final int tamperingProbability;
 
     @Autowired
-    public PossibleFailer(@NotNull ProbabilityFunction probabilityFunction,
-                          @NotNull Tamperer tamperer,
-                          @Value("${failure.probability}") final int failureProbability,
-                          @Value("${hang.probability}") final int hangProbability,
-                          @Value("${hang.timeMs}") final long hangTimeMs,
-                          @Value("${tampering.probability}") final int tamperingProbability) {
+    public PossibleThrottler(@NotNull ProbabilityFunction probabilityFunction,
+                             @NotNull Tamperer tamperer,
+                             @Value("${failure.probability}") final int failureProbability,
+                             @Value("${hang.probability}") final int hangProbability,
+                             @Value("${hang.timeMs}") final long hangTimeMs,
+                             @Value("${tampering.probability}") final int tamperingProbability) {
         this.failureProbability = failureProbability;
-        LOGGER.info("Failure probability is set to {}", this.failureProbability);
+        LOGGER.info("Throttle probability is set to {}", this.failureProbability);
         this.hangProbability = hangProbability;
         LOGGER.info("Hang probability is set to {}", this.hangProbability);
         this.hangTimeMs = hangTimeMs;

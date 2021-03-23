@@ -1,7 +1,7 @@
 package org.dimyriy.faultyserver;
 
 import org.assertj.core.api.Assertions;
-import org.dimyriy.faultyserver.filesystem.NewFileSystem;
+import org.dimyriy.faultyserver.filesystem.impl.InMemoryInMemoryFileSystemImpl;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,14 +21,14 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @SpringBootTest
 @AutoConfigureMockMvc
-public class FaultyUploadControllerTest {
+public class UploadControllerTest {
     @NotNull
     private final MockMvc mockMvc;
     @NotNull
-    private final NewFileSystem fs;
+    private final InMemoryInMemoryFileSystemImpl fs;
 
     @Autowired
-    public FaultyUploadControllerTest(@NotNull final MockMvc mockMvc, @NotNull final NewFileSystem fs) {
+    public UploadControllerTest(@NotNull final MockMvc mockMvc, @NotNull final InMemoryInMemoryFileSystemImpl fs) {
         this.mockMvc = mockMvc;
         this.fs = fs;
     }
@@ -41,7 +41,7 @@ public class FaultyUploadControllerTest {
     @Test
     void testList() throws Exception {
         putContent(fs, "1.txt", "this is file 1");
-        mockMvc.perform(get("/newStorage/files"))
+        mockMvc.perform(get("/storage/files"))
                .andDo(print())
                .andExpect(content().string(containsString("1.txt")));
     }
@@ -49,7 +49,7 @@ public class FaultyUploadControllerTest {
     @Test
     void testGetExistingFile() throws Exception {
         putContent(fs, "1.txt", "this is file 1");
-        mockMvc.perform(get("/newStorage/files/1.txt"))
+        mockMvc.perform(get("/storage/files/1.txt"))
                .andDo(print())
                .andExpect(content().string(containsString("this is file 1")));
     }
@@ -57,14 +57,14 @@ public class FaultyUploadControllerTest {
     @Test
     void testGetNonExistingFile() throws Exception {
         putContent(fs, "1.txt", "this is file 1");
-        mockMvc.perform(get("/newStorage/files/3.txt"))
+        mockMvc.perform(get("/storage/files/3.txt"))
                .andExpect(status().isNotFound());
     }
 
     @Test
     void testDeleteExistingFile() throws Exception {
         putContent(fs, "1.txt", "this is file 1");
-        mockMvc.perform(delete("/newStorage/files/1.txt"))
+        mockMvc.perform(delete("/storage/files/1.txt"))
                .andExpect(status().is2xxSuccessful());
         Assertions.assertThat(fs.exists("1.txt")).isFalse();
     }
@@ -72,7 +72,7 @@ public class FaultyUploadControllerTest {
     @Test
     void testDeleteNonExistingFile() throws Exception {
         putContent(fs, "1.txt", "this is file 1");
-        mockMvc.perform(delete("/newStorage/files/3.txt"))
+        mockMvc.perform(delete("/storage/files/3.txt"))
                .andExpect(status().isNotFound());
         Assertions.assertThat(fs.exists("1.txt")).isTrue();
     }
@@ -81,7 +81,7 @@ public class FaultyUploadControllerTest {
     void testPostNonExistingFile() throws Exception {
         Assertions.assertThat(fs.exists("1.txt")).isFalse();
         MockMultipartFile file = new MockMultipartFile("file", "1.txt", "text/plain", "this is file 1".getBytes());
-        mockMvc.perform(multipart("/newStorage/files").file(file))
+        mockMvc.perform(multipart("/storage/files").file(file))
                .andDo(print())
                .andExpect(status().is2xxSuccessful());
         Assertions.assertThat(fs.exists("1.txt")).isTrue();
@@ -93,7 +93,7 @@ public class FaultyUploadControllerTest {
         putContent(fs, "1.txt", "this is an original file");
         Assertions.assertThat(fs.exists("1.txt")).isTrue();
         MockMultipartFile file = new MockMultipartFile("file", "1.txt", "text/plain", "this is file 1".getBytes());
-        mockMvc.perform(multipart("/newStorage/files").file(file))
+        mockMvc.perform(multipart("/storage/files").file(file))
                .andDo(print())
                .andExpect(status().isConflict());
         Assertions.assertThat(TestUtil.getContent(fs, "1.txt")).isEqualTo("this is an original file");

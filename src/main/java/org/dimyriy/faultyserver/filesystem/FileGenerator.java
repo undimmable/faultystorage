@@ -14,13 +14,13 @@ public class FileGenerator {
     @NotNull
     private final AtomicInteger nFiles = new AtomicInteger(0);
 
-    public void generateFiles(@NotNull final FileSystem fileSystem, final int nFiles) {
+    public void generateFiles(@NotNull final InMemoryFileSystem inMemoryFileSystem, final int nFiles) {
         for (int i = 0; i < nFiles; i++) {
-            generateFile(fileSystem);
+            generateFile(inMemoryFileSystem);
         }
     }
 
-    public void generateFile(@NotNull final FileSystem fileSystem) {
-        fileSystem.put(nFiles.incrementAndGet() + ".txt", lorem.getWords(10, 100).getBytes());
+    public void generateFile(@NotNull final InMemoryFileSystem inMemoryFileSystem) {
+        inMemoryFileSystem.put(nFiles.incrementAndGet() + ".txt", lorem.getWords(10, 100).getBytes());
     }
 }
