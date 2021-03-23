@@ -13,10 +13,10 @@ OpenAPI документация (описание доступных URL'ов) 
 
 ### API Нового хранилища
 
-#### GET <base-url>/newStorage/files возвращает список файлов в новом хранилище
-#### GET <base-url>/newStorage/files/{filename} возвращает контент файла с указанным именем
-#### DELETE <base-url>/newStorage/files/{filename} удаляет файл с указанным именем
-#### POST <base-url>/newStorage/files multipart/form-data загружает файл в новый storage 
+#### GET <base-url>/storage/files возвращает список файлов в новом хранилище
+#### GET <base-url>/storage/files/{filename} возвращает контент файла с указанным именем
+#### DELETE <base-url>/storage/files/{filename} удаляет файл с указанным именем
+#### POST <base-url>/storage/files multipart/form-data загружает файл в новый storage 
 
 ## Задача
 Вам нужно, не меняя API сервера, переписать код так, чтобы загружаемые файлы хранились не на сервере, а в AWS S3.
