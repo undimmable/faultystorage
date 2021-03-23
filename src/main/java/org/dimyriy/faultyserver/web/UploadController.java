@@ -1,7 +1,7 @@
 package org.dimyriy.faultyserver.web;
 
-import org.dimyriy.faultyserver.storage.FaultyStorage;
-import org.dimyriy.faultyserver.storage.NewFaultyStorage;
+import org.dimyriy.faultyserver.storage.Storage;
+import org.dimyriy.faultyserver.storage.impl.StorageImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
 import org.springframework.http.MediaType;
@@ -17,26 +17,26 @@ import java.util.List;
 import static org.dimyriy.faultyserver.validation.Constants.FILENAME_REGEX;
 
 @RestController
-@RequestMapping("/newStorage")
-public class FaultyUploadController {
+@RequestMapping("/storage")
+public class UploadController {
     @NotNull
-    private final FaultyStorage faultyStorage;
+    private final Storage storage;
 
     @Autowired
-    public FaultyUploadController(@NotNull final NewFaultyStorage faultyStorage) {
-        this.faultyStorage = faultyStorage;
+    public UploadController(@NotNull final StorageImpl faultyStorage) {
+        this.storage = faultyStorage;
     }
 
     @GetMapping(value = "files", produces = MediaType.APPLICATION_JSON_VALUE)
     @Validated
     public List<String> list() {
-        return faultyStorage.list();
+        return storage.list();
     }
 
     @PostMapping(value = "files", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     @Validated
     public ResponseEntity<?> upload(@RequestParam("file") @NotNull(message = "'file' should be present") final MultipartFile file) {
-        return faultyStorage.upload(file);
+        return storage.upload(file);
     }
 
     @NotNull
@@ -45,7 +45,7 @@ public class FaultyUploadController {
     public ResponseEntity<?> delete(@PathVariable
                                     @NotNull(message = "filename should be provided")
                                     @Pattern(regexp = FILENAME_REGEX, message = "filename is invalid") final String filename) {
-        return faultyStorage.delete(filename);
+        return storage.delete(filename);
     }
 
     @NotNull
@@ -54,7 +54,7 @@ public class FaultyUploadController {
     public ResponseEntity<Resource> download(@PathVariable
                                              @NotNull(message = "filename should be provided")
                                              @Pattern(regexp = FILENAME_REGEX, message = "filename is invalid") final String filename) {
-        return faultyStorage.download(filename);
+        return storage.download(filename);
     }
 
 

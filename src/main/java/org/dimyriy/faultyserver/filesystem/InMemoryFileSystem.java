@@ -11,7 +11,7 @@ import java.util.concurrent.locks.ReadWriteLock;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
 
 @ThreadSafe
-public class FileSystem {
+public class InMemoryFileSystem {
     @NotNull
     private final Map<String, byte[]> files = new ConcurrentHashMap<>();
     @NotNull

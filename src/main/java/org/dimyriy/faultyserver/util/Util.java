@@ -1,6 +1,6 @@
 package org.dimyriy.faultyserver.util;
 
-import org.dimyriy.faultyserver.filesystem.FileSystem;
+import org.dimyriy.faultyserver.filesystem.InMemoryFileSystem;
 import org.springframework.core.io.InputStreamResource;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.server.ResponseStatusException;
@@ -24,13 +24,13 @@ public final class Util {
     }
 
     @NotNull
-    public static byte[] getFile(@NotNull final String filename, @NotNull FileSystem fs) {
+    public static byte[] getFile(@NotNull final String filename, @NotNull InMemoryFileSystem fs) {
         return Optional.ofNullable(fs.get(filename))
                        .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
     }
 
     @NotNull
-    public static InputStreamResource getAsResource(@NotNull final String filename, @NotNull final FileSystem fileSystem) {
-        return asOctetStream(getFile(filename, fileSystem));
+    public static InputStreamResource getAsResource(@NotNull final String filename, @NotNull final InMemoryFileSystem inMemoryFileSystem) {
+        return asOctetStream(getFile(filename, inMemoryFileSystem));
     }
 }

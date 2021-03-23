@@ -1,7 +1,7 @@
 package org.dimyriy.faultyserver.storage;
 
-import org.dimyriy.faultyserver.faults.Failer;
-import org.dimyriy.faultyserver.filesystem.FileSystem;
+import org.dimyriy.faultyserver.faults.Throttler;
+import org.dimyriy.faultyserver.filesystem.InMemoryFileSystem;
 import org.dimyriy.faultyserver.util.Util;
 import org.springframework.core.io.Resource;
 import org.springframework.http.HttpStatus;
@@ -13,26 +13,26 @@ import javax.validation.constraints.NotNull;
 import java.io.IOException;
 import java.util.List;
 
-public class FaultyStorage {
+public class Storage {
     @NotNull
-    private final Failer failer;
+    private final Throttler throttler;
     @NotNull
-    private final FileSystem fs;
+    private final InMemoryFileSystem fs;
 
-    public FaultyStorage(@NotNull final Failer failer, @NotNull final FileSystem fs) {
-        this.failer = failer;
+    public Storage(@NotNull final Throttler throttler, @NotNull final InMemoryFileSystem fs) {
+        this.throttler = throttler;
         this.fs = fs;
     }
 
     @NotNull
     public List<String> list() {
-        failer.apply();
+        throttler.apply();
         return fs.list();
     }
 
     @NotNull
     public ResponseEntity<?> delete(@NotNull final String filename) {
-        failer.apply();
+        throttler.apply();
         if (!fs.delete(filename)) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND);
         } else {
@@ -42,7 +42,7 @@ public class FaultyStorage {
 
     @NotNull
     public ResponseEntity<?> upload(@NotNull final MultipartFile file) {
-        failer.apply();
+        throttler.apply();
         final String originalFilename = file.getOriginalFilename();
         if (originalFilename == null) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "filename should be present");
@@ -52,7 +52,7 @@ public class FaultyStorage {
         }
         try {
             final byte[] content = file.getBytes();
-            failer.tamper(content);
+            throttler.tamper(content);
             if (!fs.put(originalFilename, content)) {
                 throw new ResponseStatusException(HttpStatus.CONFLICT);
             }
@@ -64,7 +64,7 @@ public class FaultyStorage {
 
     @NotNull
     public ResponseEntity<Resource> download(@NotNull final String filename) {
-        failer.apply();
+        throttler.apply();
         assertExists(filename);
         return ResponseEntity.ok(Util.asOctetStream(Util.getFile(filename, fs)));
     }
