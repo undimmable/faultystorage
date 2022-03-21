@@ -1,9 +1,6 @@
 name: Comment on PR
 on: 
 	push
-  # pull_request:
-  #   types:
-  #     - opened
 jobs:
   comment:
     if: github.event.pull_request.draft == false
