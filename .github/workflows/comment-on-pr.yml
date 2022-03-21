@@ -1,6 +1,5 @@
 name: Comment on PR
-on: 
-	push
+on: push
 jobs:
   comment:
     if: github.event.pull_request.draft == false
