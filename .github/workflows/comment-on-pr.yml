@@ -19,7 +19,7 @@ jobs:
             - [ ]  _non-obvious corner cases_
             - [ ]  _potentialy affected areas_
             <details>
-            	<summary>Platforms checked</summary>
+            <summary>Platforms checked</summary>
             - [ ] macOS
             - [ ] Windows
             - [ ] Android
