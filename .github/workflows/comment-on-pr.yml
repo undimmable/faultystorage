@@ -11,7 +11,7 @@ jobs:
       - uses: mshick/add-pr-comment@v1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        allow-repeats: false
+        allow-repeats: "false"
         with:
           message: |
             ** How to test manually **
