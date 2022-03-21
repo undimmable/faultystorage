@@ -14,20 +14,20 @@ jobs:
 	allow-repeats: false
 	with:
 	  message: |
-		\#\# How to test manually 
-		- [ ]  _happy path_
-		- [ ]  _non-obvious corner cases_
-		- [ ]  _potentialy affected areas_
-		<details>
-			<summary>Platforms checked</summary>
+    \#\# How to test manually 
+    - [ ]  _happy path_
+    - [ ]  _non-obvious corner cases_
+    - [ ]  _potentialy affected areas_
+    <details>
+    	<summary>Platforms checked</summary>
 
-		- [ ] macOS
-		- [ ] Windows
-		- [ ] Android
-		- [ ] iOS
+    - [ ] macOS
+    - [ ] Windows
+    - [ ] Android
+    - [ ] iOS
 
-		</details>
+    </details>
 
-		\#\# [Automated tests](https://www.notion.so/pitch/How-to-write-tests-8dc88e45a0a34f37be958388a5acf2fe#124767a5ff6b4c2d8b2c6c016631bb91)
-		- [ ] Created/modified
-		- [ ] Separate ticket for tests is created  \#1234567
+    \#\# [Automated tests](https://www.notion.so/pitch/How-to-write-tests-8dc88e45a0a34f37be958388a5acf2fe#124767a5ff6b4c2d8b2c6c016631bb91)
+    - [ ] Created/modified
+    - [ ] Separate ticket for tests is created  \#1234567
