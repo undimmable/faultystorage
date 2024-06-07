@@ -1,28 +1,30 @@
-# Миграция данных в Faulty Storage
-Faulty Storage – это бедовый сервер, но другого в некоторой воображаемой компании Faulty Inc., к сожалению, не предвидится, так что сегодня придётся поработать с таким.
+# Data Migration in Faulty Storage
+Faulty Storage is an awful file storage, but it's the only one we have in our Faulty Inc., so you'll have face the reality and work with what you have.
 
-По ссылке выше находится jar-файл Faulty-Storage сервера. Приложение написано на восьмой java, поэтому для того, чтобы его запустить, нужно установить jdk версии не меньше 1.8. После запуска командой
+The link above contains the jar with the storage server. It uses java 8, so you'll have to install at least jre somewhere to run it:
 ```bash
 # java -jar faulty-server.jar
 ```
-приложение начинает слушать http-реквесты по адресу `http://localhost:8080`.
+after start, it listens for http requests on `http://localhost:8080`.
 
 ## API Faulty Storage
 
-OpenAPI документация (описание доступных URL'ов) после старта приложения доступна [по ссылке](http://localhost:8080/swagger-ui/index.html?configUrl=/v3/api-docs/swagger-config), но для удобства она продублирована ниже.
+It also has some OpenAPI docs which you can get from [the link](http://localhost:8080/swagger-ui/index.html?configUrl=/v3/api-docs/swagger-config), but for convenience,
 
-### API Нового хранилища
+### API
 
-#### GET <base-url>/storage/files возвращает список файлов в новом хранилище
-#### GET <base-url>/storage/files/{filename} возвращает контент файла с указанным именем
-#### DELETE <base-url>/storage/files/{filename} удаляет файл с указанным именем
-#### POST <base-url>/storage/files multipart/form-data загружает файл в новый storage 
+#### GET <base-url>/storage/files lists all files
+#### GET <base-url>/storage/files/{filename} returns the content of {filename}
+#### DELETE <base-url>/storage/files/{filename} deletes the file {filename}
+#### POST <base-url>/storage/files multipart/form-data creates new file (it's awful, I told you)
 
-## Задача
-Вам нужно, не меняя API сервера, переписать код так, чтобы загружаемые файлы хранились не на сервере, а в AWS S3.
+## Task
+You need to also support the storage in S3 without changing the server code.
 
-В результате у вас должен получиться fork этого репозитория с решением задачи и E2E тестами. Мы ждём от вас ссылку на github с кодом выполненного задания и, конечно, желательно, чтобы у нас была возможность собрать приложение из этого исходного кода и запустить E2E тесты с минимальной и понятной конфигурацией.
+The most convenient way to submit the solutuon is to fork the repo and create pull-request. The solution should have adequate set of tests, including E2E and it would be nice if we could build it ourselves and run it without any errors.
 
 
-##
-Можно использовать [minio](https://min.io/) в качестве S3-хранилища
+## Hint
+
+* You can use [minio](https://min.io/) for storage, it's fully S3 compatible
+* Running E2E tests without errors might mean that S3 should somehow be available during tests
